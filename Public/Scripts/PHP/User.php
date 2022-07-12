@@ -240,4 +240,17 @@ class User
             # code...
         }
     }
+    // Generate Password method
+    public function generatePassword()
+    {
+        // Local variables
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $length = rand(25, 128);
+        $plain = "";
+        // For-loop to generate the password needed
+        for ($index = 0; $index < $length; $index++) {
+            $plain += $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $plain;
+    }
 }
