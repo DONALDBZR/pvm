@@ -18,6 +18,7 @@ class User
     private string $encryptedPassword;
     protected PHPDataObject $PDO;
     protected $Mail;
+    public $domain = "http://pvm.local";
     // Constructor method
     public function __construct()
     {
@@ -208,36 +209,61 @@ class User
     public function register()
     {
         // JSON to be decoded from the front-end
-        $JSON = json_decode(file_get_contents('php://input'));
+        $request = json_decode(file_get_contents('php://input'));
         // Query to select all the users from the database 
         $this->PDO->query("SELECT * FROM PasswordManager.Users WHERE mailAddress = :mailAddress");
-        $this->PDO->bind(":mailAddress", $JSON->mailAddress);
+        $this->PDO->bind(":mailAddress", $request->mailAddress);
         $this->PDO->execute();
         // If-statement to verify that the result returned is null
         if (empty($this->PDO->resultSet())) {
-            // Encrypting the password that is generated
-            $this->set;
             // Setting all the data needed
-            $this->setMailAddress($JSON->mailAddress);
-
+            $this->setMailAddress($request->mailAddress);
+            $this->setPassword($this->generatePassword());
             // Sending the required details
-            $this->PHPMailer->IsSMTP();
-            $this->PHPMailer->CharSet = "UTF-8";
-            $this->PHPMailer->Host = "smtp-mail.outlook.com";
-            $this->PHPMailer->SMTPDebug = 0;
-            $this->PHPMailer->Port = 587;
-            $this->PHPMailer->SMTPSecure = 'tls';
-            $this->PHPMailer->SMTPAuth = true;
-            $this->PHPMailer->IsHTML(true);
-            $this->PHPMailer->Username = "system.password@outlook.com";
-            $this->PHPMailer->Password = "Aegis4869";
-            $this->PHPMailer->setFrom($this->PHPMailer->Username);
-            $this->PHPMailer->addAddress($this->getMailAddress());
-            $this->PHPMailer->Subject = "Password: Registration Complete!";
-            $this->PHPMailer->Body = "Your password is " . $this->getPassword() . ".  Please consider to change your password after logging in!";
-            $this->PHPMailer->send();
+            $this->Mail->IsSMTP();
+            $this->Mail->CharSet = "UTF-8";
+            $this->Mail->Host = "smtp-mail.outlook.com";
+            $this->Mail->SMTPDebug = 0;
+            $this->Mail->Port = 587;
+            $this->Mail->SMTPSecure = 'tls';
+            $this->Mail->SMTPAuth = true;
+            $this->Mail->IsHTML(true);
+            $this->Mail->Username = "system.pvm@outlook.com";
+            $this->Mail->Password = "Aegis4869";
+            $this->Mail->setFrom($this->Mail->Username);
+            $this->Mail->addAddress($this->getMailAddress());
+            $this->Mail->Subject = "Password: Registration Complete!";
+            $this->Mail->Body = "Your password is " . $this->getPassword() . ".  Please consider to change your password after logging in!";
+            $this->Mail->send();
+            // Encrypting the password
+            $this->keyFinder($this->getPassword());
+            $this->encrypt($this->getPassword());
+            // Inserting the data in the database server
+            $this->PDO->query("INSERT INTO PasswordManager.Users(mailAddress, encrytedPassword) VALUES (:mailAddress, :encryptedPassword)");
+            $this->PDO->bind(":mailAddress", $this->getMailAddress());
+            $this->PDO->bind(":encryptedPassword", $this->getEncryptedPassword());
+            $this->PDO->execute();
+            // Generating the JSON that will be sent as a response
+            $response = array(
+                "success" => "success",
+                "url" => $this->domain . "/Login",
+                "message" => "You have been successfully registered for this service!"
+            );
+            // Setting the content-type for the response
+            header("Content-Type: application/json");
+            // Sending the response
+            echo json_encode($response);
         } else {
-            # code...
+            // Generating the JSON that will be sent as a response
+            $response = array(
+                "success" => "failure",
+                "url" => $this->domain . "/Login",
+                "message" => "You already have accessed to this service!"
+            );
+            // Setting the content-type for the response
+            header("Content-Type: application/json");
+            // Sending the response
+            echo json_encode($response);
         }
     }
     // Generate Password method
