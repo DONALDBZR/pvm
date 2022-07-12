@@ -3,7 +3,7 @@
 class PHPDataObject
 {
     // Class variables
-    private string $dataSourceName = "mysql:dbname=pvm;host=localhost:3306";
+    private string $dataSourceName = "mysql:dbname=PasswordManager;host=localhost:3306";
     private string $username = "root";
     private string $password = "Aegis4869";
     private PDO $databaseHandler;
