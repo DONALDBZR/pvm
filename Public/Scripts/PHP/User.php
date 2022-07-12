@@ -103,21 +103,21 @@ class User
         $this->setKey((int)round(pow(strlen($text), 0.5)));
     }
     // Encrypt method
-    public function encrypt()
+    public function encrypt(string $plain)
     {
         // Local variables
         $matrix = array();
         $cipher = "";
         // For-loop to fill the matrix
-        for ($firstIndex = 0; $firstIndex < (int)(round(strlen($this->getPassword()) / $this->getKey())); $firstIndex++) {
+        for ($firstIndex = 0; $firstIndex < (int)(round(strlen($plain) / $this->getKey())); $firstIndex++) {
             // Local variables
             $matrixRow = array();
             // For-loop to fill the row of the matrix
             for ($secondIndex = 0; $secondIndex < $this->getKey(); $secondIndex++) {
                 // If-statement to determine whether the indices have not reached the length of the password
-                if ($firstIndex * $this->getKey() + $secondIndex < strlen($this->getPassword())) {
+                if ($firstIndex * $this->getKey() + $secondIndex < strlen($plain)) {
                     // Adding the charcter of the password into the array
-                    $matrixRow[] = $this->getPassword()[$firstIndex * $this->getKey() + $secondIndex];
+                    $matrixRow[] = $plain[$firstIndex * $this->getKey() + $secondIndex];
                 } else {
                     $matrixRow[] = ".";
                 }
@@ -156,13 +156,13 @@ class User
         $this->setEncryptedPassword($cipher);
     }
     // Decrypt method
-    public function decrypt()
+    public function decrypt($cipher)
     {
         // Local variables
         $count = 0;
         $plain = "";
         $width = $this->getKey();
-        $height = (int)(round(strlen($this->getEncryptedPassword()) / $this->getKey()));
+        $height = (int)(round(strlen($cipher) / $this->getKey()));
         // If-statement to calculate the depth
         if ($width < $height) {
             $depth = pow($width, 0.5);
@@ -203,5 +203,41 @@ class User
         }
         // Setting the data for the decrypted password
         $this->setPassword($plain);
+    }
+    // Register method
+    public function register()
+    {
+        // JSON to be decoded from the front-end
+        $JSON = json_decode(file_get_contents('php://input'));
+        // Query to select all the users from the database 
+        $this->PDO->query("SELECT * FROM PasswordManager.Users WHERE mailAddress = :mailAddress");
+        $this->PDO->bind(":mailAddress", $JSON->mailAddress);
+        $this->PDO->execute();
+        // If-statement to verify that the result returned is null
+        if (empty($this->PDO->resultSet())) {
+            // Encrypting the password that is generated
+            $this->set;
+            // Setting all the data needed
+            $this->setMailAddress($JSON->mailAddress);
+
+            // Sending the required details
+            $this->PHPMailer->IsSMTP();
+            $this->PHPMailer->CharSet = "UTF-8";
+            $this->PHPMailer->Host = "smtp-mail.outlook.com";
+            $this->PHPMailer->SMTPDebug = 0;
+            $this->PHPMailer->Port = 587;
+            $this->PHPMailer->SMTPSecure = 'tls';
+            $this->PHPMailer->SMTPAuth = true;
+            $this->PHPMailer->IsHTML(true);
+            $this->PHPMailer->Username = "system.password@outlook.com";
+            $this->PHPMailer->Password = "Aegis4869";
+            $this->PHPMailer->setFrom($this->PHPMailer->Username);
+            $this->PHPMailer->addAddress($this->getMailAddress());
+            $this->PHPMailer->Subject = "Password: Registration Complete!";
+            $this->PHPMailer->Body = "Your password is " . $this->getPassword() . ".  Please consider to change your password after logging in!";
+            $this->PHPMailer->send();
+        } else {
+            # code...
+        }
     }
 }
