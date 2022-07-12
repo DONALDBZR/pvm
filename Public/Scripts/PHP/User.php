@@ -10,6 +10,8 @@ class User
 {
     // Class variables
     private int $id;
+    private string $firstName;
+    private string $lastName;
     private string $mailAddress;
     private string $password;
     private int $key;
@@ -74,11 +76,31 @@ class User
     {
         $this->encryptedPassword = $encryptedPassword;
     }
+    // First Name accessor method
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+    // First Name mutator method
+    public function setFirstName(string $firstName)
+    {
+        $this->firstName = $firstName;
+    }
+    // Last Name accessor method
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+    // Last Name mutator method
+    public function setLastName(string $lastName)
+    {
+        $this->lastName = $lastName;
+    }
     // Key Finder method
     public function keyFinder(string $text)
     {
         // Calculating the key which is the square root of the length of the password given that a password should never be less than 25 characters of length
-        $this->setKey((int)round(pow(strlen($this->getPassword()), 0.5)));
+        $this->setKey((int)round(pow(strlen($text), 0.5)));
     }
     // Encrypt method
     public function encrypt()
@@ -132,5 +154,54 @@ class User
         }
         // Setting the data for the encrypted password
         $this->setEncryptedPassword($cipher);
+    }
+    // Decrypt method
+    public function decrypt()
+    {
+        // Local variables
+        $count = 0;
+        $plain = "";
+        $width = $this->getKey();
+        $height = (int)(round(strlen($this->getEncryptedPassword()) / $this->getKey()));
+        // If-statement to calculate the depth
+        if ($width < $height) {
+            $depth = pow($width, 0.5);
+        } else {
+            $depth = pow($height, 0.5);
+        }
+        // Creating a two-dimensional array
+        $matrix = array(array());
+        // For-loop to decrypt the cipher
+        for ($firstIndex = 0; $firstIndex < $depth; $firstIndex++) {
+            // For-loop to go down
+            for ($secondIndex = 0; $secondIndex < $height - $firstIndex - 1; $secondIndex++) {
+                $matrix[$secondIndex][$width - $firstIndex - 1] = $this->getEncryptedPassword()[$count];
+                $count++;
+            }
+            // For-loop to go left
+            for ($secondIndex = $width - $firstIndex - 1; $secondIndex > $firstIndex; $secondIndex--) {
+                $matrix[$height - $firstIndex - 1][$secondIndex] = $this->getEncryptedPassword()[$count];
+                $count++;
+            }
+            // For-loop to go up
+            for ($secondIndex = $height - $firstIndex - 1; $secondIndex > $firstIndex; $secondIndex--) {
+                $matrix[$secondIndex][$firstIndex] = $this->getEncryptedPassword()[$count];
+                $count++;
+            }
+            // For-loop to go right
+            for ($secondIndex = 0; $secondIndex < $width - $firstIndex - 1; $secondIndex++) {
+                $matrix[$firstIndex][$secondIndex] = $this->getEncryptedPassword()[$count];
+                $count++;
+            }
+        }
+        // For-loop to re-construct the password
+        for ($firstIndex = 0; $firstIndex < $height; $firstIndex++) {
+            // For-loop to read row by row
+            for ($secondIndex = 0; $secondIndex < $width; $secondIndex++) {
+                $plain += $matrix[$firstIndex][$secondIndex];
+            }
+        }
+        // Setting the data for the decrypted password
+        $this->setPassword($plain);
     }
 }
