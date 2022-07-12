@@ -51,7 +51,7 @@ class Main extends Application {
         // Preventing default submission
         event.preventDefault();
         // Using fetch API to send data as a json as a request to obtain a json back as a response
-        fetch("./Register.php", {
+        fetch("./UserRegister.php", {
             method: "POST",
             body: JSON.stringify({
                 mailAddress: this.state.mailAddress
