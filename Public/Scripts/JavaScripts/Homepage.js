@@ -1,27 +1,19 @@
-// Homepage class
-class Homepage extends React.Component {
-    // Render method
+class Application extends React.Component {
     render() {
         return [<Header />, <Main />];
     }
 }
-// Header class
-class Header extends Homepage {
-    // Render method
+class Header extends Application {
     render() {
         return (
-            <header>
-                Welcome to the Password Manager
-            </header>
+            <header id="homepageHeader">Welcome to the Password Manager</header>
         );
     }
 }
-// Main class
-class Main extends Homepage {
-    // Render method
+class Main extends Application {
     render() {
         return (
-            <main>
+            <main id="homepageMain">
                 <div>
                     <a href="/Register">Register</a>
                 </div>
@@ -32,5 +24,4 @@ class Main extends Homepage {
         );
     }
 }
-// Rendering /
-ReactDOM.render(<Homepage />, document.getElementById("app"));
+ReactDOM.render(<Application />, document.getElementById("app"));

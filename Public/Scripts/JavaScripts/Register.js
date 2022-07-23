@@ -1,64 +1,53 @@
-// Application class
 class Application extends React.Component {
-    // Render method
     render() {
         return [<Header />, <Main />, <Footer />];
     }
 }
-// Header class
 class Header extends Application {
-    // Render method
     render() {
         return (
-            <header>
+            <header id="registerHeader">
                 <div id="home">
                     <a href="../">
                         <img src="../Public/Images/(1569).png" />
                     </a>
                 </div>
-                <div id="pageDescription">Password Manager Registration Page</div>
+                <div id="pageDescription">
+                    Password Manager Registration Page
+                </div>
             </header>
         );
     }
 }
-// Main class
 class Main extends Application {
-    // Constructor method
     constructor(props) {
         super(props);
         this.state = {
             mailAddress: "",
             success: "",
             message: "",
-            url: ""
+            url: "",
         };
     }
-    // Change handler method
     handleChange(event) {
-        // Local variables
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        // Changing the state of the targeted name to its value
         this.setState({
-            [name]: value
+            [name]: value,
         });
     }
-    // Submit handler method
     handleSubmit(event) {
-        // Local variables
         const delay = 4000;
-        // Preventing default submission
         event.preventDefault();
-        // Using fetch API to send data as a json as a request to obtain a json back as a response
         fetch("./UserRegister.php", {
             method: "POST",
             body: JSON.stringify({
-                mailAddress: this.state.mailAddress
+                mailAddress: this.state.mailAddress,
             }),
             headers: {
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         })
             .then((response) => response.json())
             .then((data) =>
@@ -70,23 +59,25 @@ class Main extends Application {
             )
             .then(() => this.redirector(delay));
     }
-    // Redirector method
     redirector(delay) {
-        // Setting the timeout before redirecting the user
         setTimeout(() => {
-            window.location.url = this.state.url
+            window.location.url = this.state.url;
         }, delay);
     }
-    // Render method
     render() {
         return (
-            <main>
+            <main id="registerMain">
                 <form method="POST" onSubmit={this.handleSubmit.bind(this)}>
                     <div id="mailAddress">
-                        <div>
-                            Mail Address:
-                        </div>
-                        <input type="email" name="mailAddress" placeholder="Mail Address" value={this.state.mailAddress} onChange={this.handleChange.bind(this)} required />
+                        <div>Mail Address:</div>
+                        <input
+                            type="email"
+                            name="mailAddress"
+                            placeholder="Mail Address"
+                            value={this.state.mailAddress}
+                            onChange={this.handleChange.bind(this)}
+                            required
+                        />
                     </div>
                     <div id="button">
                         <button>Register</button>
@@ -99,16 +90,14 @@ class Main extends Application {
         );
     }
 }
-// Footer class
 class Footer extends Application {
-    // Render method
     render() {
         return (
-            <footer>
-                Already have an account for that user? Prompt him/her to <a href="../Login">log in</a>
+            <footer id="registerFooter">
+                Already have an account for that user? Prompt him/her to{" "}
+                <a href="../Login">log in</a>
             </footer>
         );
     }
 }
-// Rendering /
 ReactDOM.render(<Application />, document.getElementById("app"));
