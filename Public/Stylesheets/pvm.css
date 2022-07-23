@@ -1,0 +1,155 @@
+@font-face {
+    font-family: "Proxima Nova";
+    src: url("../Fonts/Proxima Nova.otf");
+    src: url("../Fonts/Proxima Nova - Alternate.otf");
+}
+@font-face {
+    font-family: "Source Code Pro";
+    src: url("../Fonts/Source Code Pro - Black.otf");
+    src: url("../Fonts/Source Code Pro - Black Italic.otf");
+    src: url("../Fonts/Source Code Pro - Bold.otf");
+    src: url("../Fonts/Source Code Pro - Bold Italic.otf");
+    src: url("../Fonts/Source Code Pro - Extra Light.otf");
+    src: url("../Fonts/Source Code Pro - Extra Light Italic.otf");
+    src: url("../Fonts/Source Code Pro - Italic.otf");
+    src: url("../Fonts/Source Code Pro - Light.otf");
+    src: url("../Fonts/Source Code Pro - Light Italic.otf");
+    src: url("../Fonts/Source Code Pro - Medium.otf");
+    src: url("../Fonts/Source Code Pro - Medium Italic.otf");
+    src: url("../Fonts/Source Code Pro - Regular.otf");
+    src: url("../Fonts/Source Code Pro - Semi Bold.otf");
+    src: url("../Fonts/Source Code Pro - Semi Bold Italic.otf");
+}
+:root {
+    --proximaNova: "Proxima Nova";
+    --color1: rgb(51, 51, 51);
+    --color2: rgb(205, 205, 205);
+    --color3: rgb(0, 0, 0);
+    --color4: rgb(255, 255, 255);
+    --color5: rgba(26, 26, 26, 0.5);
+    --color6: rgba(255, 255, 255, 0.5);
+    --color7: rgb(255, 0, 0);
+    --percentage: 100%;
+    --pixel: 100px;
+    --tablet: 0.729;
+    --mobile: 0.531441;
+    --sourceCodePro: "Source Code Pro";
+}
+* {
+    background-color: var(--color1);
+    color: var(--color2);
+    width: var(--percentage);
+    margin: calc(var(--percentage) * 0);
+    font-family: sans-serif;
+}
+#homepageHeader {
+    text-align: center;
+    font-size: calc(var(--percentage) * 2);
+    font-family: var(--proximaNova);
+    font-weight: bold;
+    margin: calc(var(--percentage) * 0.01) calc(var(--percentage) * 0);
+}
+#homepageMain {
+    display: flex;
+}
+#homepageMain div {
+    text-align: center;
+    font-family: var(--sourceCodePro);
+    font-weight: bold;
+    font-size: calc(var(--percentage) * 1.21);
+    margin-top: calc(var(--percentage) * 0.01);
+}
+#homepageMain div a {
+    text-decoration: none;
+    color: var(--color1);
+    background-color: var(--color2);
+    padding: calc(var(--percentage) * 0.0295245)
+        calc(var(--percentage) * 0.059049);
+}
+#homepageMain div a:hover {
+    background-color: var(--color1);
+    color: var(--color2);
+}
+#http404Header h1,
+#http404Main h1 {
+    font-size: calc(var(--percentage) * 2);
+    text-align: center;
+}
+#http404Main h1 {
+    color: var(--color7);
+}
+#registerHeader,
+#registerMain {
+    margin: calc(var(--percentage) * 0.01) calc(var(--percentage) * 0);
+}
+#registerHeader #home {
+    display: flex;
+    justify-content: center;
+}
+#registerHeader #home a {
+    width: unset;
+}
+#registerHeader #home a img {
+    height: calc(var(--pixel) * 1);
+    width: auto;
+    opacity: calc(var(--percentage) * 0.5);
+}
+#registerHeader #home a img:hover {
+    opacity: var(--percentage);
+}
+#registerHeader #pageDescription {
+    text-align: center;
+    font-weight: bold;
+    font-family: var(--proximaNova);
+    font-size: calc(var(--percentage) * 1.3122);
+}
+#registerMain form #mailAddress {
+    display: flex;
+}
+#registerMain form #mailAddress div,
+#registerMain form #mailAddress input {
+    font-family: var(--sourceCodePro);
+}
+#registerMain form #mailAddress div {
+    width: calc(var(--percentage) * 0.102945566);
+}
+#registerMain form #mailAddress input {
+    width: calc(var(--percentage) * 0.897054434);
+    border: none;
+    background-color: var(--color5);
+    color: var(--color6);
+}
+#registerMain form #button {
+    margin-top: calc(var(--percentage) * 0.01);
+    text-align: center;
+}
+#registerMain form #button button {
+    width: unset;
+    color: var(--color1);
+    background-color: var(--color2);
+    font-family: var(--proximaNova);
+    font-weight: bold;
+    font-size: var(--percentage);
+    padding: calc(var(--percentage) * 0.010294556)
+        calc(var(--percentage) * 0.020589113);
+    cursor: pointer;
+    border: none;
+}
+#registerMain form #button button:hover {
+    background-color: var(--color1);
+    color: var(--color2);
+}
+#registerFooter {
+    text-align: center;
+    font-style: italic;
+}
+#registerFooter a {
+    font-style: normal;
+    text-decoration: none;
+    font-family: var(--sourceCodePro);
+    font-weight: normal;
+}
+#registerFooter a:hover {
+    text-decoration: underline;
+    font-weight: bold;
+}
