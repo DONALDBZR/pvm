@@ -1,14 +1,13 @@
 <?php
-// PHP Data Object class
+require_once $_SERVER["DOCUMENT_ROOT"] . "/Public/Scripts/PHP/Environment.php";
 class PHPDataObject
 {
-    // Class variables
+    private $Environment = new Environment();
     private string $dataSourceName = "mysql:dbname=PasswordManager;host=localhost:3306";
-    private string $username = "root";
-    private string $password = "Aegis4869";
+    private string $username = $this->Environment->mysqlUsername;
+    private string $password = $this->Environment->mysqlPassword;
     private PDO $databaseHandler;
     private $statement;
-    // Constructor method
     public function __construct()
     {
         $options = array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
@@ -18,7 +17,6 @@ class PHPDataObject
             echo "Connection Failed: " . $error->getMessage();
         }
     }
-    // Bind method
     public function bind($parameter, $value, $type = null)
     {
         if (is_null($type)) {
@@ -38,17 +36,14 @@ class PHPDataObject
         }
         $this->statement->bindValue($parameter, $value, $type);
     }
-    // Query method
     public function query($query)
     {
         $this->statement = $this->databaseHandler->prepare($query);
     }
-    // Execute method
     public function execute()
     {
         return $this->statement->execute();
     }
-    // Result Set method
     public function resultSet()
     {
         $this->execute();
